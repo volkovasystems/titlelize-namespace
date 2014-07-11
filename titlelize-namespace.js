@@ -15,6 +15,12 @@
 	@module-documentation:
 
 	@end-module-documentation
+
+	@include:
+	    {
+	        "spread-namespace": "spreadNamespace"
+	    }
+	@end-include
 */
 var titlelizeNamespace = function titlelizeNamespace( namespace ){
 	/*:
@@ -26,7 +32,12 @@ var titlelizeNamespace = function titlelizeNamespace( namespace ){
 	*/
 
 	if( NAMESPACE_PATTERN.test( namespace ) ){
+        namespace = spreadNamespace( namespace );
 
+        return namespace.replace( NAMESPACE_TERM_PATTERN,
+            function onReplaced( match ){
+                return match.toUpperCase( );
+            } );
 	}else{
 		var error = new Error( "invalid namespace format" );
 		console.error( error );
@@ -34,7 +45,11 @@ var titlelizeNamespace = function titlelizeNamespace( namespace ){
 	}
 };
 
-const NAMESPACE_PATTERN = /^(?:[a-zA-Z][a-zA-Z0-9]+[-_ ])*[a-zA-Z][a-zA-Z0-9]+$/;
-const NAMESPACE_TERM_PATTERN = /^([a-zA-Z])|[-_ ]([a-zA-Z])/;
+const NAMESPACE_PATTERN = /^(?:[a-zA-Z][a-zA-Z0-9]*[-_ ])*[a-zA-Z][a-zA-Z0-9]*$/;
+const NAMESPACE_TERM_PATTERN = /^[a-zA-Z]|([-_ ])[a-zA-Z]/g;
+
+var spreadNamespace = require( "./spread-namespace/spread-namespace" );
 
 ( module || { } ).exports = titlelizeNamespace;
+
+console.log( titlelizeNamespace( "abc def-ghi_jkl Mno P q R" ) );

@@ -1,0 +1,3 @@
+[submodule "spread-namespace"]
+	path = spread-namespace
+	url = git@github.com:volkovasystems/spread-namespace.git
